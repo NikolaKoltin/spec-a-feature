@@ -1522,6 +1522,98 @@ Details:
 **Assumptions:**
 **Open Issues:**
 
+### **UC-STU-remind-missing-submissions: The instructor reminds students about missing weekly submissions**
+
+**UC ID and Name:** UC-STU-remind-missing-submissions: Remind students about missing weekly submissions
+**Created By:**
+**Date Created:**
+**Primary Actor:** instructor
+**Secondary Actors:** student; email service (Gmail SMTP, CI-email-notifications)
+**Trigger:** The instructor indicates to remind students of a course section about missing weekly submissions.
+**Description:** The instructor wants to email a reminder only to the students who are missing their weekly activity report or peer evaluation for a chosen week, so that she can follow up with those students instead of contacting the whole course section.
+
+**Preconditions:**
+
+- PRE-1. The instructor is logged into the system.
+- PRE-2. The instructor is assigned to the course section (BR-section-scoped-access).
+
+**Postconditions:**
+
+- POST-1. Each student who is missing a weekly activity report or peer evaluation for the chosen week, and who is not skipped under the extensions of this use case, has been delivered one reminder email, except those the system could not email (7a).
+- POST-2. Each delivered reminder is recorded with the student, the instructor, the chosen week, the missing item(s), and the date it was delivered.
+- POST-3. The instructor is told which students were reminded, which were skipped and why, and which could not be emailed.
+
+**Main Success Scenario:**
+
+1. The instructor indicates to remind students of a course section about missing weekly submissions.
+2. The system asks the instructor to choose a week, offering only the course section's active weeks (BR-active-weeks).
+3. The instructor chooses a week.
+4. The system determines, for each student in the course section, whether her weekly activity report for the chosen week and/or her peer evaluation of the chosen week is missing, according to "Missing submission" defined in the Associated Information of this use case.
+5. The system displays the students who will be reminded, with the item(s) each is missing, and the students who will be skipped, with the reason for each, and asks the instructor to confirm.
+6. The instructor confirms sending the reminders.
+7. The system sends each student to be reminded one email that names only the item(s) she is missing and the instructor who sent it, according to "Reminder email" defined in the Associated Information of this use case.
+8. The system records each delivered reminder.
+9. The system informs the instructor how many students were reminded, and lists any students who were skipped or could not be emailed.
+10. Use case ends.
+
+**Extensions:**
+
+- **4a. Every student has submitted both items for the chosen week:**
+  - 4a1. The system informs the instructor that no student is missing a submission for that week.
+  - 4a2. Use case ends.
+- **4b. A student is not assigned to a team:**
+  - 4b1. The system skips that student, since she cannot submit either item until she is assigned to a team (BR-team-assignment-required).
+  - 4b2. The system lists her for the instructor as "not on a team," so that the instructor can ask the course admin to assign her.
+  - 4b3. The normal flow continues at step 5.
+- **4c. A student is deactivated:**
+  - 4c1. The system skips that student, since deactivation revokes her access and she cannot log in to submit either item (BR-student-lifecycle).
+  - 4c2. The system lists her for the instructor as "deactivated."
+  - 4c3. The normal flow continues at step 5.
+- **4d. The peer evaluation window for the chosen week has not opened yet:**
+  - 4d1. The system does not remind any student about the peer evaluation of that week, since a week is evaluated only during the following week (BR-evaluation-submission-window).
+  - 4d2. The weekly activity report is still checked; a student missing only the peer evaluation is not reminded.
+  - 4d3. The normal flow continues at step 5.
+- **4e. The peer evaluation window for the chosen week has closed:**
+  - 4e1. The system does not remind any student about the peer evaluation of that week, since it can no longer be submitted (BR-evaluation-submission-window).
+  - 4e2. The weekly activity report is still checked; a student missing only the peer evaluation is not reminded.
+  - 4e3. The normal flow continues at step 5.
+- **4f. More than one week has passed since the chosen week's report due day and time:**
+  - 4f1. The system does not remind any student about the weekly activity report for that week (BR-report-reminder-cutoff).
+  - 4f2. The peer evaluation is still checked; a student missing only the report is not reminded.
+  - 4f3. The normal flow continues at step 5.
+- **4g. A student has already been delivered an instructor reminder today for the same item and week:**
+  - 4g1. The system does not remind her again about that item (BR-reminder-daily-limit); she is still reminded about any other item she is missing that is not limited.
+  - 4g2. The system lists her for the instructor as "already reminded today."
+  - 4g3. The normal flow continues at step 5.
+- **4h. After the skips above, no student is left to remind:**
+  - 4h1. The system informs the instructor that no reminders will be sent and lists the skipped students with their reasons.
+  - 4h2. Use case ends.
+- **6a. The instructor cancels:**
+  - 6a1. The system sends no reminders and records nothing.
+  - 6a2. Use case ends.
+- **7a. The system cannot email one or more students:**
+  - 7a1. The system continues with the remaining students rather than abandoning the batch, so that one undeliverable address does not cost the other students their reminder.
+  - 7a2. The system does not record a reminder for a student it could not email, so the failed attempt does not count toward BR-reminder-daily-limit and she can be reminded again once her address is fixed.
+  - 7a3. The system reports to the instructor which students it could not email.
+  - 7a4. The normal flow continues at step 8.
+
+**Priority:** Medium
+**Frequency of Use:** 1 instructor per course section, about 1-2 usages per active week.
+**Business Rules:** BR-section-scoped-access, BR-role-based-access, BR-team-assignment-required, BR-student-lifecycle, BR-active-weeks, BR-evaluation-submission-window, BR-report-reminder-cutoff, BR-reminder-daily-limit
+
+**Associated Information:**
+
+- Missing submission: For the chosen active week, a student is missing her weekly activity report if she has zero activities recorded for that week, whether she never added any or added some and later deleted all of them. She is missing her peer evaluation if she has no saved peer evaluation of that week, meaning the one submitted during the following week. One run of this use case checks both items, and each student is reminded only about the item(s) she is missing.
+- Reminder email: The email names the course section, the chosen week, the item(s) the student is missing, and the instructor who sent it. It contains no information about any other student.
+- Choosing a week: Only active weeks may be chosen, but the use case may be run at any time, including during an inactive week. This is required because the last active week is evaluated in the week after the active window closes (BR-active-weeks), which may itself be inactive.
+- Related requirement: FR-NOT-weekly-reminder sends automatic reminders on a schedule. Those automatic reminders are separate from this use case and do not count toward BR-reminder-daily-limit.
+- Per BR-role-based-access, a course admin holds every instructor capability and may also perform this use case for the course sections she owns.
+- The instructor shall be able to cancel the use case at any time before confirming in step 6.
+
+**Related Use Cases:** UC-STU-view-pending-invitations: View the students who have not registered yet
+**Assumptions:**
+**Open Issues:**
+
 ## **Instructor**
 
 ### **UC-INS-invite-instructors: The course admin invites instructors to register an account**
