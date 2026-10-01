@@ -1546,7 +1546,7 @@ Details:
 **Main Success Scenario:**
 
 1. The instructor indicates to remind students of a course section about missing weekly submissions.
-2. The system asks the instructor to choose a week, offering only the course section's active weeks (BR-active-weeks).
+2. The system asks the instructor to choose a week, offering only the course section's active weeks that have already started, including the current week (BR-active-weeks).
 3. The instructor chooses a week.
 4. The system determines, for each student in the course section, whether her weekly activity report for the chosen week and/or her peer evaluation of the chosen week is missing, according to "Missing submission" defined in the Associated Information of this use case.
 5. The system displays the students who will be reminded, with the item(s) each is missing, and the students who will be skipped, with the reason for each, and asks the instructor to confirm.
@@ -1605,7 +1605,7 @@ Details:
 
 - Missing submission: For the chosen active week, a student is missing her weekly activity report if she has zero activities recorded for that week, whether she never added any or added some and later deleted all of them. She is missing her peer evaluation unless she has a saved peer evaluation of that week, meaning one submitted during the following week, for every member of her current team, herself included, as UC-EVA-submit-evaluation requires. One run of this use case checks both items, and each student is reminded only about the item(s) she is missing.
 - Reminder email: The email names the course section, the chosen week, the item(s) the student is missing, and the instructor who sent it. It contains no information about any other student.
-- Choosing a week: Only active weeks may be chosen, but the use case may be run at any time, including during an inactive week. This is required because the last active week is evaluated in the week after the active window closes (BR-active-weeks), which may itself be inactive.
+- Choosing a week: Only active weeks that have already started may be chosen, so the instructor may remind students about the current week before its report is due, but not about a future week, but the use case may be run at any time, including during an inactive week. This is required because the last active week is evaluated in the week after the active window closes (BR-active-weeks), which may itself be inactive.
 - Related requirement: FR-NOT-weekly-reminder sends automatic reminders on a schedule. Those automatic reminders are separate from this use case and do not count toward BR-reminder-daily-limit.
 - Per BR-role-based-access, a course admin holds every instructor capability and may also perform this use case for the course sections she owns.
 - The instructor shall be able to cancel the use case at any time before confirming in step 6.
