@@ -1551,7 +1551,7 @@ Details:
 4. The system determines, for each student in the course section, whether her weekly activity report for the chosen week and/or her peer evaluation of the chosen week is missing, according to "Missing submission" defined in the Associated Information of this use case.
 5. The system displays the students who will be reminded, with the item(s) each is missing, and the students who will be skipped, with the reason for each, and asks the instructor to confirm.
 6. The instructor confirms sending the reminders.
-7. The system sends each student to be reminded one email that names only the item(s) she is missing and the instructor who sent it, according to "Reminder email" defined in the Associated Information of this use case.
+7. The system checks each student again as in step 4, and sends each student who is still to be reminded one email that names only the item(s) she is missing and the instructor who sent it, according to "Reminder email" defined in the Associated Information of this use case.
 8. The system records each delivered reminder.
 9. The system informs the instructor how many students were reminded, and lists any students who were skipped or could not be emailed.
 10. Use case ends.
