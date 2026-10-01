@@ -1603,7 +1603,7 @@ Details:
 
 **Associated Information:**
 
-- Missing submission: For the chosen active week, a student is missing her weekly activity report if she has zero activities recorded for that week, whether she never added any or added some and later deleted all of them. She is missing her peer evaluation if she has no saved peer evaluation of that week, meaning the one submitted during the following week. One run of this use case checks both items, and each student is reminded only about the item(s) she is missing.
+- Missing submission: For the chosen active week, a student is missing her weekly activity report if she has zero activities recorded for that week, whether she never added any or added some and later deleted all of them. She is missing her peer evaluation unless she has a saved peer evaluation of that week, meaning one submitted during the following week, for every member of her current team, herself included, as UC-EVA-submit-evaluation requires. One run of this use case checks both items, and each student is reminded only about the item(s) she is missing.
 - Reminder email: The email names the course section, the chosen week, the item(s) the student is missing, and the instructor who sent it. It contains no information about any other student.
 - Choosing a week: Only active weeks may be chosen, but the use case may be run at any time, including during an inactive week. This is required because the last active week is evaluated in the week after the active window closes (BR-active-weeks), which may itself be inactive.
 - Related requirement: FR-NOT-weekly-reminder sends automatic reminders on a schedule. Those automatic reminders are separate from this use case and do not count toward BR-reminder-daily-limit.
